@@ -20,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username'
     ];
 
     /**
@@ -40,4 +41,24 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    // create User - Post relationship
+    public function posts()
+    {
+        // laravel will map User->id to Post->user_id
+        return $this->hasMany(Post::class);
+    }
+
+    public function likes()
+    {
+        // user likes a post (not how many they have received)
+        return $this->hasMany(Like::class);
+    }
+
+    public function likesReceived()
+    {
+        // user has many likes through many posts
+        // ~many likes foreach post
+        return $this->hasManyThrough(Like::class, Post::class);
+    }
 }
